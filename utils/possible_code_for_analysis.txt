@@ -1,0 +1,54 @@
+#########3 visualisation of groups together #####3
+
+# # Grouping the R^2 values based on the 'group' they belong to
+# grouped_r2 = defn.set_index('description').join(pd.Series(r2_values, name='R2')).reset_index()
+
+# # Sort the R2 values within each group
+# grouped_r2_sorted = grouped_r2.groupby('group').apply(lambda x: x.sort_values('R2', ascending=True)).reset_index(drop=True)
+
+# # Adjust the code here if 'description' is not a column
+# # Make sure 'description' is a column in grouped_r2_sorted
+# if 'description' not in grouped_r2_sorted.columns:
+#     grouped_r2_sorted['description'] = grouped_r2_sorted.index
+
+# # Create lists to hold the sorted variables, their R2 values, and group names for labeling
+# sorted_vars = []
+# sorted_r2_values = []
+# group_labels = []
+
+# # For each group, extend the lists with the sorted variables and their R2 values
+# for group, data in grouped_r2_sorted.groupby('group'):
+#     sorted_r2_values.extend(data['R2'])  # This will be the y-axis values
+#     group_labels.extend([group] * len(data))  # This will repeat the group name for each variable
+
+# # Create the midpoints for the group labels on the x-axis
+# midpoints = []
+# last_index = 0
+# for group, count in grouped_r2_sorted['group'].value_counts().sort_index().items():
+#     midpoint = last_index + count / 2
+#     midpoints.append(midpoint)
+#     last_index += count
+
+
+# with sns.color_palette('deep'):
+#     fig, ax = plt.subplots(figsize=(10, 7))  # Adjusted figure size for horizontal layout
+#     bars = ax.barh(range(len(sorted_r2_values)), sorted_r2_values)
+#     ax.set_yticks(midpoints)
+#     ax.set_yticklabels(grouped_r2_sorted['group'].unique(), va='center') # rotation=45
+
+#     # Adding shaded bands for groups
+#     last_index = 0
+#     for count in grouped_r2_sorted['group'].value_counts().sort_index():
+#         ax.fill_betweenx(np.arange(last_index, last_index + count), 0, 1.2, color='k', alpha=0.1)
+#         last_index += count
+
+#     ax.set_xlim(0, 1.0)
+#     ax.set_ylim(-1, len(sorted_r2_values))
+#     #set x axis label
+#     ax.set_xlabel(r'R^2 Value')
+#     fig.tight_layout()
+
+# plt.show()
+
+
+#####
