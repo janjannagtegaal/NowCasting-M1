@@ -1,0 +1,51 @@
+<div style="color:#00BFFF">
+
+### Create Additional dataset with Differencing (through Rate of Change Q-o-Q) 
+**Objective:** To create secondary dataset to compare different economic indicators on a common scale.
+
+**Method:** We normalize the rate of change of various indicators from one period to the next. This standardization facilitates more meaningful analysis across diverse data points, as it accounts for differences in magnitude and unit measurements.
+
+Using the rate of change as a standardization method for these variables can be quite effective, especially in the context of economic data and nowcasting models. This approach has several advantages:
+
+**Advantages of Using Rate of Change**
+
+1. **Comparability**: It allows for a more meaningful comparison across different indicators, which may have different scales and units.
+
+2. **Trend Analysis**: Rate of change emphasizes trends and growth rates, which are often more informative for economic analysis than absolute levels.
+
+3. **Stationarity**: Economic time series data often need to be stationary for effective modeling. Rates of change can help in achieving stationarity, a common requirement for many time series models.
+
+4. **Handling Non-Linearity**: Log transformations followed by calculating rates of change can linearize exponential growth patterns, making the data more suitable for linear modeling techniques.
+
+5. **Economic Relevance**: Rates of change are inherently more meaningful in economic analysis. For instance, policymakers and analysts are often more interested in the growth rate of GDP rather than its absolute level.
+
+**Considerations**
+
+However, there are a few considerations to keep in mind:
+
+- **Loss of Level Information**: By focusing on rates of change, you lose information about the absolute levels, which can sometimes be relevant.
+- **Volatility**: Rates of change can sometimes amplify volatility, especially in series with small absolute numbers.
+- **Interpretability**: Ensure that the transformed data remains interpretable and aligned with economic intuition.
+joined_dataset_rate_of_change = joined_dataset.pct_change()
+
+joined_dataset_rate_of_change = joined_dataset_rate_of_change.replace([np.inf, -np.inf], np.nan)
+
+# joined_dataset_rate_of_change = handle_and_display_missing_values(joined_dataset_rate_of_change)
+
+joined_dataset_rate_of_change.head(3)
+<div style="color:#00BFFF">
+
+##### Standardizing rate of change dataframe (Z-Score Normalization) 
+By rescaling the data to have a mean of zero and a standard deviation of one, we facilitate multivariate analyses and make our variables comparable in terms of variation from their mean growth. This is crucial for regression models and techniques like PCA where scale impacts the results significantly.
+from sklearn.preprocessing import StandardScaler
+
+# Initialize the StandardScaler
+scaler = StandardScaler()
+
+# Fit the scaler to the data and transform it and applying this only to the numeric columns
+scaled_data = scaler.fit_transform(joined_dataset_rate_of_change.select_dtypes(include=['float64', 'int64']))
+
+# Create a new DataFrame with the scaled data and assumes that the index contains non-numeric columns like dates
+joined_dataset_rate_of_change = pd.DataFrame(scaled_data, index=joined_dataset_rate_of_change.index, columns=joined_dataset_rate_of_change.select_dtypes(include=['float64', 'int64']).columns)
+
+joined_dataset_rate_of_change.head()
