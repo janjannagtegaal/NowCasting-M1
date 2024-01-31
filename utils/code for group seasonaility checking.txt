@@ -1,0 +1,38 @@
+from statsmodels.graphics.tsaplots import plot_acf
+import matplotlib.pyplot as plt
+import math
+
+def plot_group_acf(dataset, defn, selected_group):
+    """
+    Plot Autocorrelation Function (ACF) for each indicator in the selected group.
+
+    :param dataset: Pandas DataFrame containing the time series data.
+    :param defn: DataFrame with 'description' and 'group' columns.
+    :param selected_group: The group to analyze.
+    """
+    # Create a dictionary mapping indicator names to their groups
+    group_mapping = defn.set_index('description')['group'].to_dict()
+
+    # Filter indicators belonging to the selected group
+    indicators_in_group = [indicator for indicator, group in group_mapping.items() if group == selected_group]
+
+    # Calculate the number of rows needed for subplots
+    num_indicators = len(indicators_in_group)
+    num_rows = math.ceil(num_indicators / 4)
+
+    # Create subplots
+    fig, axes = plt.subplots(nrows=num_rows, ncols=4, figsize=(15, num_rows * 3))
+    axes = axes.flatten()  # Flatten to 1D array for easy iteration
+
+    # Iterate over each indicator and plot ACF
+    for i, column in enumerate(indicators_in_group):
+        if column in dataset.columns:
+            plot_acf(dataset[column], ax=axes[i], lags=20)  # Adjust lags as needed
+            axes[i].set_title(f"{column} (Group: {selected_group})", fontsize=7)
+
+    # Adjust layout and display the plot
+    plt.tight_layout()
+    plt.show()
+
+# Example usage
+plot_group_acf(joined_dataset, defn, 'Labor Market')
