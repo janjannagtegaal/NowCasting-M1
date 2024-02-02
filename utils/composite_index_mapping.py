@@ -86,7 +86,8 @@ interest_and_exchange_rates = {'Short_Term_Rate_Index':
                                     (['1-Year Treasury C Minus FEDFUNDS', 
                                     '3-Month Treasury C Minus FEDFUNDS', 
                                     '5-Year Treasury C Minus FEDFUNDS', 
-                                    '10-Year Treasury C Minus FEDFUNDS', '3-Month Commercial Paper Minus FEDFUNDS', 
+                                    '10-Year Treasury C Minus FEDFUNDS', 
+                                    '3-Month Commercial Paper Minus FEDFUNDS', 
                                     '6-Month Treasury C Minus FEDFUNDS'],
                                     'mean'),
                                     
@@ -121,13 +122,13 @@ composite_indices_info.update(stock_market)
 
 ####################################################################################################
 
-### Consumption, Orders, and Inventories
+### prices
 
-consumption_orders_inventories = {'Consumer_Spending_Index':
+prices = {'Consumer_Spending_Index':
                                     (['Personal Cons. Exp: Durable goods',
                                     'Personal Cons. Exp: Nondurable goods',
                                     'Personal Cons. Exp: Services'], 
-                                    'sum'),  # or 'mean', if average spending is preferred
+                                    'mean'),  # or 'mean', if average spending is preferred
                                 
                                 'Producer_Price_Index': 
                                     (['PPI: Crude Materials',
@@ -139,33 +140,56 @@ consumption_orders_inventories = {'Consumer_Spending_Index':
                             }
 
 # Update the composite_index dictionary     
-composite_indices_info.update(consumption_orders_inventories)
+composite_indices_info.update(prices)
 
 
 ####################################################################################################
-####Money and Credit
+##Money and Credit
 
 money_and_credit_indices = {'Consumer_Credit_Index':    
                                 (['Consumer Motor Vehicle Loans Outstanding', 
                                 'Total Consumer Loans and Leases Outstanding', 
                                 'Total Nonrevolving Credit'],
-                                'mean'),
-                            
-                            'Commercial_Credit_Index':  
-                                (['Commercial and Industrial Loans', 
-                                'Real Estate Loans at All Commercial Banks'],
-                                'mean'),
-                                
-                            'Monetary_Aggregates_Index':
-                                (['M1 Money Stock', 
-                                'M2 Money Stock'],
-                                'mean'), #'MZM Money Stock', 'St. Louis Adjusted Monetary Base'
-                                
-                            'Banking_Reserves_Index':   
-                                (['Reserves Of Depository Institutions', 
-                                'Total Reserves of Depository Institutions'],
                                 'mean')
+                            
+                            # 'Commercial_Credit_Index':  
+                            #     (['Commercial and Industrial Loans', 
+                            #     'Real Estate Loans at All Commercial Banks'],
+                            #     'mean'),
+                                
+                            # 'Monetary_Aggregates_Index':
+                            #     (['M1 Money Stock', 
+                            #     'M2 Money Stock',
+                            #     'Securities in Bank Credit at All Commercial Banks'],
+                            #     'mean'), #'MZM Money Stock', 'St. Louis Adjusted Monetary Base'
                             }
 
 # Update the composite_index dictionary     
 composite_indices_info.update(money_and_credit_indices)
+
+
+# ####################################################################################################
+# ### Consumption, Orders, and Inventories
+
+consumption_orders_inventories = {
+    'Consumer_Demand_Composite_Index': 
+        ([
+            'Real personal consumption expenditures',
+            'New Orders for Consumer Goods',
+            'Retail and Food Services Sales',
+            'Total Business Inventories'
+        ], 
+        'mean'),
+    
+    'New_Orders_Index': 
+        ([
+            'New Orders for Durable Goods',
+            'New Orders for Nondefense Capital Goods',
+            'Un lled Orders for Durable Goods',
+            'Real Manu. and Trade Industries Sales'
+        ], 
+        'sum')
+}
+composite_indices_info.update(consumption_orders_inventories)
+
+
