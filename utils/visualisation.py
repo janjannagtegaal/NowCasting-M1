@@ -232,54 +232,37 @@ def plot_correlations(correlation_series, top_n=10, bottom_n=10):
 #plot top correlated features vs PCE in a subplot layout
 
 
-# def plot_top_features_vs_pce(dataset, top_correlations, num_features=10, look_back_periods=80):
-#     """
-#     Plots the top correlated features against PCE in a subplot layout.
+def top_indicators_against_pce_line_graph(df,top_correlations):
 
-#     Parameters:
-#     - dataset: DataFrame containing the data including PCE and other features.
-#     - top_correlations: Series or list of top correlated feature names, sorted by correlation strength.
-#     - num_features: Number of top features to plot against PCE.
-#     - look_back_periods: Number of latest periods to include in the plot.
-#     """
-#     # If top_correlations is a Series, convert it to a list of column names
-#     if isinstance(top_correlations, pd.Series):
-#         top_features = top_correlations.index.tolist()[:num_features + 1]
-#     else:
-#         top_features = top_correlations[:num_features + 1]
-    
-#     # Extract the top correlated features excluding 'PCE'
-#     top_features = [feature for feature in top_correlations[:num_features + 1] if feature != 'PCE'][:num_features]
+    # Extract the top correlated features excluding 'PCE'
+    top_features = [feature for feature in top_correlations.index[:12] if feature != 'PCE']
 
-#     # Calculate the required number of rows considering the actual number of features to plot
-#     nrows = int(len(top_features) / 2) + (len(top_features) % 2)
-    
-#     # Setup the figure and subplots
-#     fig, axs = plt.subplots(nrows, 2, figsize=(25, 3 * nrows), constrained_layout=True)
-#     fig.subplots_adjust(hspace=0.4, wspace=0.3)
-    
-#     # Flatten the axes array for easy iteration and handle case of single subplot
-#     axs = axs.flatten() if num_features > 1 else [axs]
-    
-#     # Plot each feature in its subplot against PCE
-#     for i, feature in enumerate(top_features):
-#         if i < len(axs):  # Check to ensure there's a subplot available
-#             axs[i].plot(dataset.index[-look_back_periods:], dataset[feature][-look_back_periods:], label=f'{feature} vs. PCE', color='black')
-#             axs[i].plot(dataset.index[-look_back_periods:], dataset['PCE'][-look_back_periods:], label='PCE', color='red', alpha=0.5)
-#             axs[i].set_title(f'{feature} vs. PCE')
-#             axs[i].set_xlabel('Date')
-#             axs[i].set_ylabel('Value')
-#             axs[i].legend()
-    
-#     # Ensure we only use the subplots needed for the top features
-#     for j in range(len(top_features), len(axs)):
-#         fig.delaxes(axs[j])
-    
-#     # Add an overall title
-#     fig.suptitle('Top Correlations Against PCE since 2000', fontsize=16)
-    
-#     # Show the plot
-#     plt.show()
+    # Setup the figure and subplots
+    fig, axs = plt.subplots(6, 2, figsize=(25, 20))  # Adjust figsize as needed
+    fig.subplots_adjust(hspace=0.4, wspace=0.3)  # Adjust spacing as needed
+
+    # Flatten the axes array for easy iteration
+    axs = axs.flatten()
+
+    # Plot each feature in its subplot against PCE
+    for i, feature in enumerate(top_features):
+        # Plotting feature against PCE
+        axs[i].plot(df.index[-80:], df[feature][-80:], label=f'{feature} vs. PCE',color='black')
+        axs[i].plot(df.index[-80:], df['PCE'][-80:], label='PCE', color='red',alpha=0.5)
+        axs[i].set_title(f'{feature} vs. PCE')
+        axs[i].set_xlabel('Date') 
+        axs[i].set_ylabel('Value')
+        axs[i].legend()
+
+    # Ensure we only use the subplots needed for the top features
+    for j in range(i + 1, 10):
+        fig.delaxes(axs[j])
+
+    # Add an overall title
+    fig.suptitle('Top Correlations Against PCE since 2000', fontsize=16)
+
+    # Show the plot
+    plt.show()
 
     
 #     pass
