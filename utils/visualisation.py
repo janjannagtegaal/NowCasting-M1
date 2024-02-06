@@ -376,12 +376,12 @@ def plot_correlation_circle_heatmap(
     colors = [cmap(val) for val in correlation_matrix.values.flatten()]
 
     # Create the bubble heatmap
-    for (x, y), size, color,value in zip(
-        np.c_[x_coords.ravel(), y_coords.ravel()], sizes, colors, correlation_matrix.values.flatten()
+    for (x, y), size, color in zip( #,value
+        np.c_[x_coords.ravel(), y_coords.ravel()], sizes, colors, #correlation_matrix.values.flatten()
     ):
         ax.scatter(x, y, s=size, c=[color])
         # Annotate correlation values
-        ax.text(x, y, f"{value:.2f}", ha='center', va='center', color='black', fontsize=6, rotation=45)
+        #ax.text(x, y, f"{value:.2f}", ha='center', va='center', color='black', fontsize=6, rotation=45)
 
 
     # Improve layout
