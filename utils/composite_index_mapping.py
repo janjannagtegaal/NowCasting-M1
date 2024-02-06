@@ -33,7 +33,7 @@ composite_indices_info = {
     ),
     "Avg_weekly_hours_Employment": (
         [
-            "Avg Weekly Overtime Hours : Manufacturing",
+            # "Avg Weekly Overtime Hours : Manufacturing",
             "Avg Weekly Hours : Goods-Producing",
             "Avg Weekly Hours : Manufacturing",
         ],
@@ -57,7 +57,7 @@ ip_indices = {
         ["IP: Durable Materials", "IP: Nondurable Materials", "IP: Materials"],
         "sum",
     ),
-    "IP_Prod_Equipment_Index": (
+    "Output_Prod_Equipment_Index": (
         [
             "IP: Business Equipment",
             "IP: Manufacturing (SIC)",
@@ -65,7 +65,7 @@ ip_indices = {
         ],
         "sum",
     ),
-    "IP_Final_Products_Index": (["IP: Final Products (Market Group)"], "mean"),
+    "Outpit_Final_Products_Index": (["IP: Final Products (Market Group)"], "sum"),
 }
 
 # Update the composite_index dictionary
@@ -99,7 +99,7 @@ interest_and_exchange_rates = {
     ),
     "Credit_Market_Index": (
         [
-            "E?ective Federal Funds Rate",
+            # "E?ective Federal Funds Rate",
             "Moody s Aaa Corporate Bond Minus FEDFUNDS",
             "Moody s Baa Corporate Bond Minus FEDFUNDS",
             "Moody s Seasoned Aaa Corporate Bond Yield",
@@ -172,16 +172,16 @@ money_and_credit_indices = {
         ],
         #'Total Nonrevolving Credit'],
         "mean",
-    )
-    # 'Commercial_Credit_Index':
-    #     (['Commercial and Industrial Loans',
-    #     'Real Estate Loans at All Commercial Banks'],
-    #     'mean'),
-    # 'Monetary_Aggregates_Index':
-    #     (['M1 Money Stock',
-    #     'M2 Money Stock',
-    #     'Securities in Bank Credit at All Commercial Banks'],
-    #     'mean'), #'MZM Money Stock', 'St. Louis Adjusted Monetary Base'
+    ),
+    'Commercial_Credit_Index':
+        (['Commercial and Industrial Loans',
+        'Real Estate Loans at All Commercial Banks'],
+        'mean'),
+    'Monetary_Aggregates_Index':
+        (['M1 Money Stock',
+        'M2 Money Stock'
+        ],
+        'mean'), #'MZM Money Stock', 'St. Louis Adjusted Monetary Base','Securities in Bank Credit at All Commercial Banks'
 }
 
 # Update the composite_index dictionary
@@ -192,21 +192,21 @@ composite_indices_info.update(money_and_credit_indices)
 # ### Consumption, Orders, and Inventories
 
 consumption_orders_inventories = {
-    "Consumer_Demand_Composite_Index": (
-        [
-            "Real personal consumption expenditures",
-            "New Orders for Consumer Goods",
-            "Retail and Food Services Sales",
-            "Total Business Inventories",
-        ],
-        "mean",
-    ),
+    # "Consumer_Demand_Composite_Index": (
+    #     [
+    #         "Real personal consumption expenditures",
+    #         "Retail and Food Services Sales",
+    #         "Total Business Inventories",
+    #     ],
+    #     "mean",
+    # ),
     "New_Orders_Index": (
         [
             "New Orders for Durable Goods",
             "New Orders for Nondefense Capital Goods",
             "Un lled Orders for Durable Goods",
             "Real Manu. and Trade Industries Sales",
+            "New Orders for Consumer Goods",
         ],
         "sum",
     ),

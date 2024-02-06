@@ -162,7 +162,7 @@ def plot_dataset(dataset, title):
     # Plot
     plt.figure(figsize=(15, 6))
     for i, column in enumerate(columns):
-        plt.plot(dataset.index, dataset[column], label=column, color=colors[i])
+        plt.plot(dataset.index, dataset[column], label=column, color=colors[i],linewidth=1)
 
     # Enhance the chart
     plt.title(title)
@@ -181,41 +181,6 @@ def plot_dataset(dataset, title):
     plt.show()
 
     pass
-
-
-####################################################################################################
-# #plot top correlated series with PCE
-
-# def plot_top_correlations(top_cor,n = 15):
-#     # Convert the Series to a DataFrame for plotting and sort by the absolute values
-#     top_correlations_df = top_cor.head(n).reset_index()
-#     top_correlations_df.columns = ['Indicator', 'Correlation']
-#     top_correlations_df['AbsCorrelation'] = top_correlations_df['Correlation'].abs()
-#     top_correlations_df = top_correlations_df.sort_values(by='AbsCorrelation', ascending=False)
-
-#     # Set the color for each bar based on correlation value
-#     colors = ['grey' if (x < max(top_correlations_df['AbsCorrelation'])) else 'red' for x in top_correlations_df['Correlation']]
-
-#     # Initialize the matplotlib figure
-#     f, ax = plt.subplots(figsize=(12, 6))
-
-#     # Plot the correlations using the original Correlation values, not the absolute ones
-#     sns.barplot(x="Correlation", y="Indicator", data=top_correlations_df,
-#                 palette=colors, edgecolor=".2")
-
-#     # Customize the aesthetics
-#     sns.despine(left=True, bottom=True)
-#     ax.set_xlabel('Correlation Coefficient')
-#     ax.set_ylabel('')
-#     ax.set_title('Top 15 Correlations to PCE', fontsize=16)
-#     ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x:.2f}'))
-
-#     # Optional: Add value labels to each bar for direct reading
-#     for i, v in enumerate(top_correlations_df['Correlation']):
-#         ax.text(v if v > 0 else 0, i + .25, f'{v:.2f}', color='black', va='center', fontsize=9)
-
-#     plt.show()
-
 
 ####################################################################################################
 # plot top n and bottom n correlated series with PCE
@@ -279,45 +244,95 @@ def plot_correlations(correlation_series, top_n=10, bottom_n=10):
 
 ####################################################################################################
 # plot top correlated features vs PCE in a subplot layout
+import numpy as np
+import matplotlib.pyplot as plt
 
+def top_indicators_against_pce_line_graph(df, top_correlations, top_n=10):
+    """
+    Plots line graphs of the top N correlated features against PCE.
 
-def top_indicators_against_pce_line_graph(df, top_correlations):
-
+    :param df: Pandas DataFrame containing the data.
+    :param top_correlations: Pandas Series containing correlation values with index as indicators.
+    :param top_n: Integer representing the number of top features to plot.
+    """
     # Extract the top correlated features excluding 'PCE'
-    top_features = [
-        feature for feature in top_correlations.index[:12] if feature != "PCE"
-    ]
+    top_features = [feature for feature in top_correlations.index[:top_n + 1] if feature != "PCE"]
+    actual_top_n = len(top_features)  # Actual number of top features to plot
 
-    # Setup the figure and subplots
-    fig, axs = plt.subplots(6, 2, figsize=(25, 20))  # Adjust figsize as needed
-    fig.subplots_adjust(hspace=0.4, wspace=0.3)  # Adjust spacing as needed
+    # Calculate the grid size for subplots (assuming 2 columns)
+    n_rows = int(np.ceil(actual_top_n / 2))
 
-    # Flatten the axes array for easy iteration
-    axs = axs.flatten()
+    # Setup the figure and subplots dynamically based on actual_top_n
+    fig, axs = plt.subplots(n_rows, 2, figsize=(20, n_rows * 3.5))
+    fig.subplots_adjust(hspace=0.4, wspace=0.3)
+
+    # Handle single subplot case differently to ensure axs is always a list of AxesSubplot
+    if n_rows == 1 and top_n == 1:
+        axs = [axs]
+    elif n_rows == 1:
+        axs = axs.flatten()
+    else:
+        axs = axs.flatten()
 
     # Plot each feature in its subplot against PCE
-    for i, feature in enumerate(top_features):
-        # Plotting feature against PCE
-        axs[i].plot(
-            df.index[-80:], df[feature][-80:], label=f"{feature} vs. PCE", color="black"
-        )
-        axs[i].plot(
-            df.index[-80:], df["PCE"][-80:], label="PCE", color="red", alpha=0.5
-        )
+    for i, feature in enumerate(top_features[:actual_top_n]):
+        axs[i].plot(df.index[-80:], df[feature][-80:], label=f"{feature} vs. PCE", color="black")
+        axs[i].plot(df.index[-80:], df["PCE"][-80:], label="PCE", color="red", alpha=0.5)
         axs[i].set_title(f"{feature} vs. PCE")
         axs[i].set_xlabel("Date")
         axs[i].set_ylabel("Value")
         axs[i].legend()
 
-    # Ensure we only use the subplots needed for the top features
-    for j in range(i + 1, 10):
+    # Hide unused subplots
+    for j in range(actual_top_n, len(axs)):
         fig.delaxes(axs[j])
 
     # Add an overall title
-    fig.suptitle("Top Correlations Against PCE since 2000", fontsize=16)
+    fig.suptitle("Top Correlations Against PCE", fontsize=16)
 
     # Show the plot
     plt.show()
+
+
+
+
+# def top_indicators_against_pce_line_graph(df, top_correlations,top_n=10):
+
+#     # Extract the top correlated features excluding 'PCE'
+#     top_features = [
+#         feature for feature in top_correlations.index[:top_n] if feature != "PCE"
+#     ]
+
+#     # Setup the figure and subplots
+#     fig, axs = plt.subplots(6, 2, figsize=(25, 20))  # Adjust figsize as needed
+#     fig.subplots_adjust(hspace=0.4, wspace=0.3)  # Adjust spacing as needed
+
+#     # Flatten the axes array for easy iteration
+#     axs = axs.flatten()
+
+#     # Plot each feature in its subplot against PCE
+#     for i, feature in enumerate(top_features):
+#         # Plotting feature against PCE
+#         axs[i].plot(
+#             df.index[-80:], df[feature][-80:], label=f"{feature} vs. PCE", color="black"
+#         )
+#         axs[i].plot(
+#             df.index[-80:], df["PCE"][-80:], label="PCE", color="red", alpha=0.5
+#         )
+#         axs[i].set_title(f"{feature} vs. PCE")
+#         axs[i].set_xlabel("Date")
+#         axs[i].set_ylabel("Value")
+#         axs[i].legend()
+
+#     # Ensure we only use the subplots needed for the top features
+#     for j in range(i + 1, 10):
+#         fig.delaxes(axs[j])
+
+#     # Add an overall title
+#     fig.suptitle("Top Correlations Against PCE since 2000", fontsize=16)
+
+#     # Show the plot
+#     plt.show()
 
 
 #     pass
@@ -361,10 +376,13 @@ def plot_correlation_circle_heatmap(
     colors = [cmap(val) for val in correlation_matrix.values.flatten()]
 
     # Create the bubble heatmap
-    for (x, y), size, color in zip(
-        np.c_[x_coords.ravel(), y_coords.ravel()], sizes, colors
+    for (x, y), size, color,value in zip(
+        np.c_[x_coords.ravel(), y_coords.ravel()], sizes, colors, correlation_matrix.values.flatten()
     ):
         ax.scatter(x, y, s=size, c=[color])
+        # Annotate correlation values
+        ax.text(x, y, f"{value:.2f}", ha='center', va='center', color='black', fontsize=6, rotation=45)
+
 
     # Improve layout
     ax.set_xticks(np.arange(len(correlation_matrix.columns)))
@@ -379,3 +397,58 @@ def plot_correlation_circle_heatmap(
     ax.grid(True, which="both", linestyle="--", linewidth=0.5, color="gray", alpha=0.5)
 
     plt.show()
+
+
+
+####################################################################################################
+
+def lollipop(data, threshold=10):
+    # Filtering VIF values above threshold
+    df_filtered = data[data["VIF"] > threshold]
+
+    # Creating the flipped lollipop chart
+    plt.figure(figsize=(8, 10))
+
+    plt.hlines(
+        y=df_filtered["feature"],
+        xmin=0,
+        xmax=df_filtered["VIF"],
+        color="dodgerblue",
+        alpha=0.4,
+        zorder=3,
+    )
+    plt.scatter(
+        df_filtered["VIF"],
+        df_filtered["feature"],
+        color="red",
+        s=30,
+        label=f"VIF > {threshold}",
+        zorder=5,
+    )
+
+    # Adding text labels for each value, adjusting for flipped axes
+    for i, row in df_filtered.iterrows():
+        plt.text(
+            row["VIF"],
+            row["feature"],
+            f" {row['VIF']:.2f}",
+            va="center",
+            ha="right",
+            backgroundcolor="white",
+            fontsize=8,
+        )
+
+    plt.xlabel("VIF Value")
+    plt.title("Variance Inflation Factor (VIF): Indicators with highest Colinearity")
+    plt.grid(axis="x", linestyle="--", linewidth=0.7, color="lightgrey", zorder=0)
+    plt.tight_layout()
+
+    # Hide the top, right, and bottom frame lines
+    plt.gca().spines["top"].set_visible(False)
+    plt.gca().spines["right"].set_visible(False)
+    plt.gca().spines["bottom"].set_visible(False)
+
+    # Show the plot
+    plt.show()
+    
+    pass
