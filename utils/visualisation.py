@@ -61,7 +61,7 @@ def analyze_and_plot(df, column):
             datetime_index,
             df[column],
             marker="o",
-            markersize=3,
+            markersize=1.5,
             color="black",
             linewidth=1,
             label=column,
@@ -160,7 +160,7 @@ def plot_dataset(dataset, title):
     colors = ["grey", "dodgerblue", "coral", "black"]
 
     # Plot
-    plt.figure(figsize=(15, 6))
+    plt.figure(figsize=(15, 5))
     for i, column in enumerate(columns):
         plt.plot(dataset.index, dataset[column], label=column, color=colors[i],linewidth=1)
 
@@ -264,7 +264,7 @@ def top_indicators_against_pce_line_graph(df, top_correlations, top_n=10):
 
     # Setup the figure and subplots dynamically based on actual_top_n
     fig, axs = plt.subplots(n_rows, 2, figsize=(20, n_rows * 3.5))
-    fig.subplots_adjust(hspace=0.4, wspace=0.3)
+    fig.subplots_adjust(hspace=0.4, wspace=0.3,top=0.9)
 
     # Handle single subplot case differently to ensure axs is always a list of AxesSubplot
     if n_rows == 1 and top_n == 1:
@@ -276,66 +276,44 @@ def top_indicators_against_pce_line_graph(df, top_correlations, top_n=10):
 
     # Plot each feature in its subplot against PCE
     for i, feature in enumerate(top_features[:actual_top_n]):
-        axs[i].plot(df.index[-80:], df[feature][-80:], label=f"{feature} vs. PCE", color="black")
-        axs[i].plot(df.index[-80:], df["PCE"][-80:], label="PCE", color="red", alpha=0.5)
-        axs[i].set_title(f"{feature} vs. PCE")
-        axs[i].set_xlabel("Date")
-        axs[i].set_ylabel("Value")
-        axs[i].legend()
+        axs[i].plot(df.index[-80:], df[feature][-80:], label=f"{feature} vs. PCE", color="black", linewidth=1)
+        axs[i].plot(df.index[-80:], df["PCE"][-80:], label="PCE", color="red", linewidth=1,alpha=0.5)
+        axs[i].set_title(f"{feature} vs. PCE", fontsize=10)
+        axs[i].set_xlabel("Date", fontsize=8,color='grey')
+        axs[i].set_ylabel("Value", fontsize=8,color='grey')
+        ## set no border for legend and decrease font, and set color to grey
+        axs[i].legend(frameon=False, fontsize=8, loc='lower left', labelcolor='grey')
+        axs[i].set_xticks(axs[i].get_xticks()[::12]) # Show every 20th tick to avoid crowding
+        tick_labels = [label.get_text()[:4] for label in axs[i].get_xticklabels()]
+        axs[i].set_xticklabels(tick_labels, fontsize=8,color='grey')
+        axs[i].tick_params(axis='y', labelsize=8, labelcolor='grey')
+        axs[i].tick_params(axis='x', labelsize=8, labelcolor='grey')
+        
+        #remove borders
+        axs[i].spines['top'].set_visible(False)
+        axs[i].spines['right'].set_visible(False)
+        
+        #set bottom and left border to very light grey dashed
+        axs[i].spines['bottom'].set_color('lightgrey')
+        axs[i].spines['bottom'].set_linestyle('--')
+        axs[i].spines['left'].set_color('lightgrey')
+        axs[i].spines['left'].set_linestyle('--')
+        
+        #no grid
+        axs[i].grid(False)
+
+        
 
     # Hide unused subplots
     for j in range(actual_top_n, len(axs)):
         fig.delaxes(axs[j])
 
     # Add an overall title
-    fig.suptitle("Top Correlations Against PCE", fontsize=16)
+    fig.suptitle("Top Correlations Against PCE", fontsize=16, y=0.95)
 
     # Show the plot
     plt.show()
-
-
-
-
-# def top_indicators_against_pce_line_graph(df, top_correlations,top_n=10):
-
-#     # Extract the top correlated features excluding 'PCE'
-#     top_features = [
-#         feature for feature in top_correlations.index[:top_n] if feature != "PCE"
-#     ]
-
-#     # Setup the figure and subplots
-#     fig, axs = plt.subplots(6, 2, figsize=(25, 20))  # Adjust figsize as needed
-#     fig.subplots_adjust(hspace=0.4, wspace=0.3)  # Adjust spacing as needed
-
-#     # Flatten the axes array for easy iteration
-#     axs = axs.flatten()
-
-#     # Plot each feature in its subplot against PCE
-#     for i, feature in enumerate(top_features):
-#         # Plotting feature against PCE
-#         axs[i].plot(
-#             df.index[-80:], df[feature][-80:], label=f"{feature} vs. PCE", color="black"
-#         )
-#         axs[i].plot(
-#             df.index[-80:], df["PCE"][-80:], label="PCE", color="red", alpha=0.5
-#         )
-#         axs[i].set_title(f"{feature} vs. PCE")
-#         axs[i].set_xlabel("Date")
-#         axs[i].set_ylabel("Value")
-#         axs[i].legend()
-
-#     # Ensure we only use the subplots needed for the top features
-#     for j in range(i + 1, 10):
-#         fig.delaxes(axs[j])
-
-#     # Add an overall title
-#     fig.suptitle("Top Correlations Against PCE since 2000", fontsize=16)
-
-#     # Show the plot
-#     plt.show()
-
-
-#     pass
+    pass
 
 ####################################################################################################
 # inspect for colinearity
