@@ -148,10 +148,10 @@ def create_short_description(pce_df):
 
 def transform_date_formats(pce_df):
     # Step 1: Extract only non-date columns
-    non_date_columns = pce_df.columns[:1]  # Assuming first column is non-date column
+    non_date_columns = pce_df.columns[:1]
 
     # Step 2: Extract and transform date columns
-    date_columns = pce_df.columns[1:]  # Date columns start from the 2nd column
+    date_columns = pce_df.columns[1:]  # Non-Date columns start from the 2nd column
 
     # Function to convert quarter to the format 'YYYYQX'
     def quarter_to_yyyyqx(q):
