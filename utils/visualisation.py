@@ -113,6 +113,17 @@ def analyze_and_plot(df, column):
         ax.set_title(f"{column}")
         ax.legend(bbox_to_anchor=(1.05, 1), loc="upper left")
         ax.grid(False)
+        
+        #remove borders
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        
+        #set bottom and left border to very light grey dashed
+        ax.spines['bottom'].set_color('lightgrey')
+        ax.spines['bottom'].set_linestyle('--')
+        ax.spines['left'].set_color('lightgrey')
+        ax.spines['left'].set_linestyle('--')
+        
 
     # Calculate the rate of change for each column
     pce_real_growth = df.pct_change().dropna() * 100
@@ -127,60 +138,6 @@ def analyze_and_plot(df, column):
     plt.show()
     pass
 
-
-####################################################################################################
-# plot economic series for multiple columns over time
-
-
-def plot_dataset(dataset, title):
-
-    def convert_index_to_datetime(index):
-        """Convert 'YYYYQX' format to datetime, or return the input if it's already a datetime."""
-
-        if isinstance(index, pd.Timestamp):
-            return index  # Return the input directly if it's already a Timestamp
-
-        year = int(index[:4])
-        quarter = int(index[5])
-        month = (quarter - 1) * 3 + 1  # Convert quarter to month
-
-        return pd.Timestamp(year=year, month=month, day=1)
-
-    # Convert index to datetime
-    dataset.index = pd.to_datetime(dataset.index.map(convert_index_to_datetime))
-
-    # Select random columns
-    randint = np.random.randint(0, len(dataset.columns), 3)
-    columns = dataset.columns[randint]
-
-    # add 'PCE' to the columns
-    columns = np.append(columns, "PCE")
-
-    # Define color and style
-    colors = ["grey", "dodgerblue", "coral", "black"]
-
-    # Plot
-    plt.figure(figsize=(15, 5))
-    for i, column in enumerate(columns):
-        plt.plot(dataset.index, dataset[column], label=column, color=colors[i],linewidth=1)
-
-    # Enhance the chart
-    plt.title(title)
-    plt.xlabel("Date")
-    plt.ylabel("Value")
-    plt.legend()
-
-    # Adjust x-axis to show every 10 years
-    ax = plt.gca()  # Get current axis
-    ax.xaxis.set_major_locator(YearLocator(10))  # Set major ticks to every 10 years
-    ax.xaxis.set_major_formatter(DateFormatter("%Y"))  # Format tick labels as year only
-
-    plt.xticks(rotation=45)
-    plt.grid(True, which="both", linewidth=0.3)
-
-    plt.show()
-
-    pass
 
 ####################################################################################################
 # plot top n and bottom n correlated series with PCE
@@ -276,8 +233,8 @@ def top_indicators_against_pce_line_graph(df, top_correlations, top_n=10):
 
     # Plot each feature in its subplot against PCE
     for i, feature in enumerate(top_features[:actual_top_n]):
-        axs[i].plot(df.index[-80:], df[feature][-80:], label=f"{feature} vs. PCE", color="black", linewidth=1)
-        axs[i].plot(df.index[-80:], df["PCE"][-80:], label="PCE", color="red", linewidth=1,alpha=0.5)
+        axs[i].plot(df.index[-80:], df[feature][-80:], label=f"{feature} vs. PCE", color="#FF7F50", linewidth=1)
+        axs[i].plot(df.index[-80:], df["PCE"][-80:], label="PCE", color="dodgerblue", linewidth=1,alpha=0.9)
         axs[i].set_title(f"{feature} vs. PCE", fontsize=10)
         axs[i].set_xlabel("Date", fontsize=8,color='grey')
         axs[i].set_ylabel("Value", fontsize=8,color='grey')
@@ -309,7 +266,7 @@ def top_indicators_against_pce_line_graph(df, top_correlations, top_n=10):
         fig.delaxes(axs[j])
 
     # Add an overall title
-    fig.suptitle("Top Correlations Against PCE", fontsize=16, y=0.95)
+    #fig.suptitle("Top Correlations Against PCE", fontsize=16, y=0.95)
 
     # Show the plot
     plt.show()
@@ -375,61 +332,6 @@ def plot_correlation_circle_heatmap(
     ax.grid(True, which="both", linestyle="--", linewidth=0.5, color="gray", alpha=0.5)
 
     plt.show()
-
-
-
-####################################################################################################
-
-def lollipop(data, threshold=10):
-    # Filtering VIF values above threshold
-    df_filtered = data[data["VIF"] > threshold]
-
-    # Creating the flipped lollipop chart
-    plt.figure(figsize=(8, 10))
-
-    plt.hlines(
-        y=df_filtered["feature"],
-        xmin=0,
-        xmax=df_filtered["VIF"],
-        color="dodgerblue",
-        alpha=0.4,
-        zorder=3,
-    )
-    plt.scatter(
-        df_filtered["VIF"],
-        df_filtered["feature"],
-        color="red",
-        s=30,
-        label=f"VIF > {threshold}",
-        zorder=5,
-    )
-
-    # Adding text labels for each value, adjusting for flipped axes
-    for i, row in df_filtered.iterrows():
-        plt.text(
-            row["VIF"],
-            row["feature"],
-            f" {row['VIF']:.2f}",
-            va="center",
-            ha="right",
-            backgroundcolor="white",
-            fontsize=8,
-        )
-
-    plt.xlabel("VIF Value")
-    plt.title("Variance Inflation Factor (VIF): Indicators with highest Colinearity")
-    plt.grid(axis="x", linestyle="--", linewidth=0.7, color="lightgrey", zorder=0)
-    plt.tight_layout()
-
-    # Hide the top, right, and bottom frame lines
-    plt.gca().spines["top"].set_visible(False)
-    plt.gca().spines["right"].set_visible(False)
-    plt.gca().spines["bottom"].set_visible(False)
-
-    # Show the plot
-    plt.show()
-    
-    pass
 
 
 ####################################################################################################
