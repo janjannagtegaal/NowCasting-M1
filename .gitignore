@@ -3,6 +3,8 @@ myenv/
 JJ/
 excel_sheet_inspection/
 utils/draft_code/
+research/
+documentation/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
