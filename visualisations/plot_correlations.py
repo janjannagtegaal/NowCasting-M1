@@ -36,7 +36,8 @@ def plot_correlations(correlation_series, top_n=10, bottom_n=10):
         y="Indicator",
         hue="Positive",
         dodge=False,
-        palette={True: "skyblue", False: "salmon"},
+        palette={True: "dodgerblue", False: "#FF7F50"},
+        alpha=1,
         data=correlations_combined,
     )
 
@@ -48,18 +49,37 @@ def plot_correlations(correlation_series, top_n=10, bottom_n=10):
     plt.legend(title="Positive Correlation", loc="lower right", labels=["Yes", "No"])
     plt.legend().remove()  # Remove the legend if it's not necessary
     plt.grid(axis="x", color="grey", linestyle="--", linewidth=0.5)
+    
+    # remove the right and top spines
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    
+    # make the left and bottom spines light grey and --
+    ax.spines['left'].set_color('grey')
+    ax.spines['left'].set_linestyle('--')
+    ax.spines['bottom'].set_color('grey')
+    ax.spines['bottom'].set_linestyle('--')
 
     # Annotate bars with the percentage of the correlation
     for p in ax.patches:
         width = p.get_width()
+        offset = 0.01  # Adjust offset value for better visibility
+
+        # Determine the text position based on the direction of the bar
+        text_position = width + offset if width > 0 else width - offset
+
+        # Position the text to the right of the bar if positive, left if negative
+        ha = 'left' if width > 0 else 'right'
+
         plt.text(
-            p.get_width(),
-            p.get_y() + p.get_height() / 2.0 + 0.2,
+            text_position,
+            p.get_y() + p.get_height() / 2.0,
             "{:1.2f}".format(width),
-            ha="center",
-            va="center",
+            ha=ha,  # Horizontal alignment
+            va='center',
+            color="grey",
+            fontsize='small'
         )
 
-    plt.show()
 
-    pass
+    plt.show()
