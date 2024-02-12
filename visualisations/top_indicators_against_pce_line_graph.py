@@ -5,10 +5,6 @@ from pandas.tseries.offsets import MonthBegin
 import numpy as np
 import seaborn as sns
 
-# plot top correlated features vs PCE in a subplot layout
-import numpy as np
-import matplotlib.pyplot as plt
-
 def top_indicators_against_pce_line_graph(df, top_correlations, top_n=10):
     """
     Plots line graphs of the top N correlated features against PCE.
@@ -63,8 +59,6 @@ def top_indicators_against_pce_line_graph(df, top_correlations, top_n=10):
         
         #no grid
         axs[i].grid(False)
-
-        
 
     # Hide unused subplots
     for j in range(actual_top_n, len(axs)):

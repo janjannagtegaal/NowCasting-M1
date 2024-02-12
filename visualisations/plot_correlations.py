@@ -9,7 +9,7 @@ import seaborn as sns
 # plot top n and bottom n correlated series with PCE
 
 
-def plot_correlations(correlation_series, top_n=10, bottom_n=10):
+def plot_abs_correlations(correlation_series, top_n=10):
     """
     Plot the top and bottom N correlated indicators with PCE.
 
@@ -19,13 +19,10 @@ def plot_correlations(correlation_series, top_n=10, bottom_n=10):
     - bottom_n: Number of bottom negatively correlated indicators to display.
     """
     # Extract top and bottom N correlated indicators
-    top_positive_correlations = correlation_series.head(top_n)
-    top_negative_correlations = correlation_series.tail(bottom_n)
+    top_correlations = correlation_series.head(top_n)
 
     # Combine and prepare data for plotting
-    correlations_combined = pd.concat(
-        [top_positive_correlations, top_negative_correlations]
-    ).reset_index()
+    correlations_combined = top_correlations.reset_index()
     correlations_combined.columns = ["Indicator", "Correlation"]
     correlations_combined["Positive"] = correlations_combined["Correlation"] > 0
 
@@ -45,10 +42,10 @@ def plot_correlations(correlation_series, top_n=10, bottom_n=10):
     plt.axvline(x=0, color="grey", linestyle="--")
     plt.xlabel("Correlation with PCE")
     plt.ylabel("Indicator")
-    plt.title("Top and Bottom Correlated Indicators with PCE")
+    plt.title("Top Absolute Correlated Indicators with PCE")
     plt.legend(title="Positive Correlation", loc="lower right", labels=["Yes", "No"])
     plt.legend().remove()  # Remove the legend if it's not necessary
-    plt.grid(axis="x", color="grey", linestyle="--", linewidth=0.5)
+    plt.grid(axis="y", color="grey", linestyle="--", linewidth=0.5,alpha=0.5)
     
     # remove the right and top spines
     ax.spines['right'].set_visible(False)

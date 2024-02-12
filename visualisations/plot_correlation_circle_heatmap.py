@@ -38,7 +38,7 @@ def plot_correlation_circle_heatmap(
     )
 
     # Get correlation values for size - scaled for visibility
-    sizes = np.abs(correlation_matrix.values.flatten()) * 400
+    sizes = np.abs(correlation_matrix.values.flatten()) * 200
 
     # Get colors based on correlation values
     colors = [cmap(val) for val in correlation_matrix.values.flatten()]
