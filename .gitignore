@@ -1,6 +1,8 @@
 .vscode/
 utils/__pycache__/
 utils/.ipynb_checkpoints/
+visualisations/.ipynb_checkpoints/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
