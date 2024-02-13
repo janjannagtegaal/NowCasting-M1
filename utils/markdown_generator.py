@@ -85,7 +85,9 @@ def generate_markdown_conclusions(row,df):
 - **Stationarity**: {indicator_details['Conclusion']}, confirming the data {"does" if indicator_details['Conclusion'] == "Stationary" else "does not"} exhibit constant mean and variance over time.
 - **Durbin-Watson**: {row['Durbin-Watson']:.3f}: {"There is minimal autocorrelation in the residuals, indicating independence of observations." if 1.5 < row['Durbin-Watson'] < 2.5 else "There may be autocorrelation in the residuals, which could affect the model's assumptions."}
 - **Jarque-Bera (JB) Statistic and P-Value**: {row['JB Statistic']:.2f}, {row['JB P-Value']:.2e}: {"The residuals appear to be normally distributed, supporting the model's assumptions." if row['JB P-Value'] > 0.05 else "The residuals do not appear to be normally distributed, indicating potential issues with the model."}
-- **VIF**: {indicator_details['VIF']:.2f}, suggesting {"significant" if indicator_details['VIF'] > 5 else "minimal"} multicollinearity.
+
 
 """
     display(Markdown(md_text))
+
+    # - **VIF**: {indicator_details['VIF']:.2f}, suggesting {"significant" if indicator_details['VIF'] > 5 else "minimal"} multicollinearity.
