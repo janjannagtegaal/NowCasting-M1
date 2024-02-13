@@ -2,6 +2,7 @@
 utils/__pycache__/
 utils/.ipynb_checkpoints/
 visualisations/.ipynb_checkpoints/
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
