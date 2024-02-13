@@ -1,10 +1,6 @@
 .vscode/
-myenv/
-JJ/
-excel_sheet_inspection/
-utils/draft_code/
-research/
-documentation/
+utils/__pycache__/
+utils/.ipynb_checkpoints/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
