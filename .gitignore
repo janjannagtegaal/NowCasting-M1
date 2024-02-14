@@ -7,3 +7,4 @@ visualisations/.ipynb_checkpoints/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+m1_venv/
