@@ -24,11 +24,6 @@ def train_and_predict(X_train, y_train, X_test,n_components=3):
     
     return pipeline, predicted_pce
 
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib import dates as mdates
-
 def plot_fan_chart(df_train, C, predicted_pce, X_train, y_train, start_date='2020-03-01'):
     """
     Creates a fan chart to visualize actual vs. predicted PCE with uncertainty, starting from a specified date.
