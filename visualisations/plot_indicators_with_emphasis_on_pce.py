@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 
 def plot_indicators_with_emphasis_on_pce(df, columns):
-    plt.figure(figsize=(15, 7))
+    plt.figure(figsize=(10, 6))
 
     # Calculate 4-month moving averages for all columns in df
     df_ma = df.rolling(window=4).mean()

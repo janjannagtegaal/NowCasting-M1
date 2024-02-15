@@ -10,7 +10,7 @@ def plot_skree(pca):
     cumulative_variance = np.cumsum(explained_variance_ratio)
 
     # Set up the figure and axes for the plot
-    plt.figure(figsize=(15, 5))
+    plt.figure(figsize=(10, 4))
 
     # Create the bar plot for the individual explained variances
     plt.bar(range(1, len(explained_variance_ratio) + 1), explained_variance_ratio, alpha=0.9, color='dodgerblue', label='Individual Explained Variance')
